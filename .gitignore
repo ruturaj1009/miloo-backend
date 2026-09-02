@@ -31,3 +31,8 @@ target/
 ### OS ###
 .DS_Store
 Thumbs.db
+
+### Claude CLI ###
+.claude/
+CLAUDE.md
+
