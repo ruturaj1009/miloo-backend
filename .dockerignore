@@ -1,0 +1,31 @@
+# Build artifacts
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Version control
+.git
+.gitignore
+
+# IDE / Editor configurations
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.settings/
+.project
+.classpath
+
+# OS / Temporary files
+.DS_Store
+Thumbs.db
+*.log
+
+# Sensitive environment files
+.env
+env.txt
+src/main/resources/env.txt
+
+# Documentation
+*.md
+docs/
