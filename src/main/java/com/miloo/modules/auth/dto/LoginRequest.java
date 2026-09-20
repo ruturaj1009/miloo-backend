@@ -15,6 +15,9 @@ public class LoginRequest {
     @JsonProperty("phone_number")
     private String phoneNumber;
 
+    @JsonProperty("country_code")
+    private String countryCode;
+
     @JsonProperty("email")
     private String email;
 
@@ -23,4 +26,7 @@ public class LoginRequest {
 
     @JsonProperty("otp")
     private String otp;
+
+    @JsonProperty("provider")
+    private String provider;
 }

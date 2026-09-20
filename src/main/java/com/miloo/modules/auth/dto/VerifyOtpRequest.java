@@ -16,6 +16,9 @@ public class VerifyOtpRequest {
     @JsonProperty("phone_number")
     private String phoneNumber;
 
+    @JsonProperty("country_code")
+    private String countryCode;
+
     @JsonProperty("email")
     private String email;
 

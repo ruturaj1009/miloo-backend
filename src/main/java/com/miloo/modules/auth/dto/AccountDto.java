@@ -20,11 +20,20 @@ public class AccountDto {
     @JsonProperty("phone_number")
     private String phoneNumber;
 
+    @JsonProperty("country_code")
+    private String countryCode;
+
     @JsonProperty("email")
     private String email;
 
     @JsonProperty("is_verified")
     private Boolean isVerified;
+
+    @JsonProperty("is_active")
+    private Boolean isActive;
+
+    @JsonProperty("secure_account")
+    private Boolean secureAccount;
 
     @JsonProperty("created_at")
     private String createdAt;

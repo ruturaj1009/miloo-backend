@@ -60,10 +60,12 @@ The server starts on `http://localhost:8080` and applies database migrations (`V
 ## 3. Core API Endpoints
 
 ### Auth (`auth_ctx`)
+* `POST /api/v1/auth/send-otp` - Dispatch 6-digit OTP with 5-min TTL via Twilio, MSG91, or SMTP.
+* `POST /api/v1/auth/login` - Request OTP login challenge (same dispatch mechanism).
+* `POST /api/v1/auth/verify-otp` - Verify 6-digit OTP code against PostgreSQL (master demo OTP: `123456`).
 * `POST /api/v1/auth/register` - Create new account & get JWT session.
-* `POST /api/v1/auth/login` - Request OTP or login challenge.
-* `POST /api/v1/auth/verify-otp` - Verify 6-digit OTP code (master demo OTP: `123456`).
 * `GET /api/v1/auth/me` - Get current authenticated account details.
+* *Detailed test cases & curl commands:* See [AUTH_TESTING_GUIDE.md](docs/AUTH_TESTING_GUIDE.md).
 
 ### People & Discovery (`people_ctx`)
 * `GET /api/v1/profiles/me` - Get current user's profile and photos.

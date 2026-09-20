@@ -2,6 +2,7 @@ package com.miloo.common.security;
 
 import com.miloo.common.exception.ApiException;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -12,7 +13,7 @@ public final class SecurityUtils {
     private SecurityUtils() {
     }
 
-    public static UUID getCurrentUserId() {
+    public static @NonNull UUID getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
             throw new ApiException(HttpStatus.UNAUTHORIZED, "User is not authenticated");

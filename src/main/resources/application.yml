@@ -42,19 +42,71 @@ spring:
       max-file-size: 10MB
       max-request-size: 20MB
 
+logging:
+  level:
+    root: INFO
+    com.miloo: INFO
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.hibernate: INFO
+    org.flywaydb: INFO
+  pattern:
+    level: "%5p"
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx"
+    dateformat: "yyyy-MM-dd HH:mm:ss.SSS"
+
 app:
   jwt:
     secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
     expiration-ms: 86400000 # 24 hours
     refresh-expiration-ms: 604800000 # 7 days
+  auth:
+    activation-base-url: ${AUTH_ACTIVATION_BASE_URL:http://localhost:8080/api/v1/auth/activate}
+    activation-token-ttl-hours: ${AUTH_ACTIVATION_TTL_HOURS:24}
+    mock-email-enabled: ${AUTH_MOCK_EMAIL_ENABLED:false} # Mock activation welcome email sending (distinct from OTP)
   storage:
+    provider: ${STORAGE_PROVIDER:r2} # Options: r2 | s3 | cloudinary
+    mock-enabled: ${STORAGE_MOCK_ENABLED:true} # Graceful fallback for local development
     r2:
       account-id: ${R2_ACCOUNT_ID:dummy_account}
       access-key: ${R2_ACCESS_KEY_ID:dummy_key}
       secret-key: ${R2_SECRET_ACCESS_KEY:dummy_secret}
       bucket-name: ${R2_BUCKET_NAME:miloo-media}
       public-domain: ${R2_PUBLIC_DOMAIN:https://pub-media.example.com}
-      mock-enabled: ${R2_MOCK_ENABLED:true} # true by default for zero-friction local development
+    s3:
+      region: ${AWS_REGION:us-east-1}
+      access-key: ${AWS_ACCESS_KEY_ID:dummy_key}
+      secret-key: ${AWS_SECRET_ACCESS_KEY:dummy_secret}
+      bucket-name: ${AWS_S3_BUCKET_NAME:miloo-media}
+      public-domain: ${AWS_S3_PUBLIC_DOMAIN:https://miloo-media.s3.amazonaws.com}
+    cloudinary:
+      cloud-name: ${CLOUDINARY_CLOUD_NAME:dummy_cloud}
+      api-key: ${CLOUDINARY_API_KEY:dummy_key}
+      api-secret: ${CLOUDINARY_API_SECRET:dummy_secret}
+      folder: ${CLOUDINARY_FOLDER:miloo/users}
+  otp:
+    ttl-minutes: ${OTP_TTL_MINUTES:5}
+    mock-enabled: ${OTP_MOCK_ENABLED:false} # Mock OTP service (Twilio/MSG91/SMTP OTP) independently
+    sms-provider: ${OTP_SMS_PROVIDER:msg91} # Options: twilio | msg91
+    email-provider: ${OTP_EMAIL_PROVIDER:smtp} # Options: smtp
+    max-attempts: ${OTP_MAX_ATTEMPTS:5}
+    twilio:
+      account-sid: ${TWILIO_ACCOUNT_SID:dummy_account_sid}
+      auth-token: ${TWILIO_AUTH_TOKEN:dummy_auth_token}
+      from-phone-number: ${TWILIO_FROM_PHONE_NUMBER:+15005550006}
+    msg91:
+      auth-key: ${MSG91_AUTH_KEY:dummy_msg91_auth_key}
+      template-id: ${MSG91_TEMPLATE_ID:dummy_template_id}
+      sender-id: ${MSG91_SENDER_ID:MILOO}
+    smtp:
+      host: ${SMTP_HOST:smtp.gmail.com}
+      port: ${SMTP_PORT:587}
+      username: ${SMTP_USERNAME:dummy_username}
+      password: ${SMTP_PASSWORD:dummy_password}
+      from-email: ${SMTP_FROM_EMAIL:info@miloo.app}
+      from-name: ${SMTP_FROM_NAME:Miloo Dating}
+      auth: true
+      starttls: true
   cors:
     allowed-origins: "*"
     allowed-methods: GET,POST,PUT,DELETE,OPTIONS,PATCH

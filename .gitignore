@@ -36,3 +36,9 @@ Thumbs.db
 .claude/
 CLAUDE.md
 
+### Environment Files ###
+src/main/resources/env.txt
+env.txt
+.env
+
+

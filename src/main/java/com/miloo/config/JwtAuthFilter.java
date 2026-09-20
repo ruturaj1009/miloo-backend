@@ -1,5 +1,7 @@
 package com.miloo.config;
 
+import com.miloo.modules.auth.entity.AccountEntity;
+import com.miloo.modules.auth.repository.AccountRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -25,6 +28,7 @@ import java.util.UUID;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider tokenProvider;
+    private final AccountRepository accountRepository;
 
     @Override
     protected void doFilterInternal(
@@ -38,14 +42,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 UUID userId = tokenProvider.getUserIdFromToken(jwt);
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userId,
-                        null,
-                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-                );
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                // Verify that account exists and is_active is true
+                Optional<AccountEntity> accountOpt = accountRepository.findById(userId);
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                if (accountOpt.isPresent() && Boolean.TRUE.equals(accountOpt.get().getIsActive())) {
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            userId,
+                            null,
+                            Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+                    );
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                } else {
+                    log.warn("[JWT Auth] Rejected token for userId '{}': Account does not exist or is inactive", userId);
+                }
             }
         } catch (Exception ex) {
             log.error("Could not set user authentication in security context", ex);

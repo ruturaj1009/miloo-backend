@@ -15,6 +15,9 @@ public class RegisterRequest {
     @JsonProperty("phone_number")
     private String phoneNumber;
 
+    @JsonProperty("country_code")
+    private String countryCode;
+
     @JsonProperty("email")
     private String email;
 
@@ -23,4 +26,10 @@ public class RegisterRequest {
 
     @JsonProperty("otp")
     private String otp;
+
+    @JsonProperty("secure_account")
+    private Boolean secureAccount;
+
+    @JsonProperty("two_step_enabled")
+    private Boolean twoStepEnabled;
 }
