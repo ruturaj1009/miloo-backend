@@ -11,6 +11,8 @@ services:
       # Spring Profile & Context
       - key: SPRING_PROFILES_ACTIVE
         value: prod
+      - key: SPRING_THREADS_VIRTUAL_ENABLED
+        value: "true"
       - key: SERVER_SERVLET_CONTEXT_PATH
         value: /
 
