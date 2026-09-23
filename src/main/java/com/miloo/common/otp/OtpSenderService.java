@@ -9,7 +9,7 @@ public interface OtpSenderService {
      * Dispatches the OTP code to the target destination (phone number or email address).
      *
      * @param destination Phone number (e.g. +1234567890) or email address
-     * @param otpCode Numeric verification code
+     * @param otpCode     Numeric verification code
      */
     void sendOtp(String destination, String otpCode);
 
