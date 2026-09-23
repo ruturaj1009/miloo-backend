@@ -41,7 +41,7 @@ public class OtpService {
      * Generates a 6-digit OTP, stores it in PostgreSQL with a 5-minute TTL, and sends it via
      * the specified provider override or active default provider.
      *
-     * @param destination Target phone number or email address
+     * @param destination      Target phone number or email address
      * @param providerOverride Optional provider override (e.g. "twilio", "msg91", "smtp")
      * @return Generated 6-digit OTP code
      */
@@ -93,7 +93,7 @@ public class OtpService {
      * and max verification attempts.
      *
      * @param destination Target phone number or email address
-     * @param inputCode OTP verification code entered by user
+     * @param inputCode   OTP verification code entered by user
      * @return true if OTP is valid, false otherwise
      */
     @Transactional

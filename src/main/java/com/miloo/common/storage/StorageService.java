@@ -15,8 +15,8 @@ public interface StorageService {
     /**
      * Generates a presigned URL or direct upload signed metadata for client-side uploads.
      *
-     * @param userId user requesting the upload
-     * @param filename original file name
+     * @param userId      user requesting the upload
+     * @param filename    original file name
      * @param contentType MIME type of the file
      * @return PresignedUrlResponseDto containing upload URL and media metadata
      */
@@ -26,7 +26,7 @@ public interface StorageService {
      * Directly uploads a MultipartFile from the server.
      *
      * @param userId user uploading the file
-     * @param file the MultipartFile to upload
+     * @param file   the MultipartFile to upload
      * @return FileUploadResponseDto containing uploaded media details
      */
     FileUploadResponseDto uploadFile(UUID userId, MultipartFile file);
@@ -34,9 +34,9 @@ public interface StorageService {
     /**
      * Directly uploads raw byte content with filename and contentType.
      *
-     * @param userId user uploading the file
-     * @param data byte array of the file
-     * @param filename file name
+     * @param userId      user uploading the file
+     * @param data        byte array of the file
+     * @param filename    file name
      * @param contentType MIME type
      * @return FileUploadResponseDto containing uploaded media details
      */

@@ -1,6 +1,6 @@
 # Auth Controller & OTP Service Testing Guide
 
-This document provides a comprehensive test suite specification, architectural sequence diagrams, and practical execution instructions for the **Miloo Authentication Module** (`AuthController`, `AuthService`, `OtpService`, `AuthEmailService`, and `JwtAuthFilter`).
+This document provides a comprehensive test suite specification, architectural sequence diagrams, and practical execution instructions for the **Miloo Authentication Module** (`HealthController`, `AuthService`, `OtpService`, `AuthEmailService`, and `JwtAuthFilter`).
 
 ---
 

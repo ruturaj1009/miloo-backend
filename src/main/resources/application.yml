@@ -1,13 +1,13 @@
 server:
   port: ${PORT:8080}
   servlet:
-    context-path: /
+    context-path: ${SERVER_SERVLET_CONTEXT_PATH:/}
 
 spring:
   application:
     name: miloo-backend
   profiles:
-    active: dev
+    active: ${SPRING_PROFILES_ACTIVE:dev}
 
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/miloo_db}
@@ -15,41 +15,41 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 20
-      minimum-idle: 5
-      idle-timeout: 300000
-      connection-timeout: 20000
+      maximum-pool-size: ${SPRING_DATASOURCE_MAX_POOL_SIZE:10}
+      minimum-idle: ${SPRING_DATASOURCE_MIN_IDLE:2}
+      idle-timeout: ${SPRING_DATASOURCE_IDLE_TIMEOUT:300000}
+      connection-timeout: ${SPRING_DATASOURCE_CONNECTION_TIMEOUT:20000}
 
   jpa:
-    open-in-view: false
+    open-in-view: ${SPRING_JPA_OPEN_IN_VIEW:false}
     hibernate:
-      ddl-auto: validate
-    show-sql: false
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:validate}
+    show-sql: ${SPRING_JPA_SHOW_SQL:false}
     properties:
       hibernate:
-        format_sql: false
-        default_schema: public
+        format_sql: ${SPRING_JPA_HIBERNATE_FORMAT_SQL:false}
+        default_schema: ${SPRING_JPA_HIBERNATE_DEFAULT_SCHEMA:public}
 
   flyway:
-    enabled: true
-    baseline-on-migrate: true
+    enabled: ${SPRING_FLYWAY_ENABLED:true}
+    baseline-on-migrate: ${SPRING_FLYWAY_BASELINE_ON_MIGRATE:true}
     baseline-version: 0
-    locations: classpath:db/migration
-    schemas: public,auth_ctx,people_ctx,interaction_ctx,chat_ctx,ai_ctx
+    locations: ${SPRING_FLYWAY_LOCATIONS:classpath:db/migration}
+    schemas: ${SPRING_FLYWAY_SCHEMAS:public,auth_ctx,people_ctx,interaction_ctx,chat_ctx,ai_ctx}
 
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 20MB
+      max-file-size: ${SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE:10MB}
+      max-request-size: ${SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE:20MB}
 
 logging:
   level:
-    root: INFO
-    com.miloo: INFO
-    org.springframework.web: INFO
-    org.springframework.security: INFO
-    org.hibernate: INFO
-    org.flywaydb: INFO
+    root: ${LOGGING_LEVEL_ROOT:INFO}
+    com.miloo: ${LOGGING_LEVEL_COM_MILOO:INFO}
+    org.springframework.web: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB:INFO}
+    org.springframework.security: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY:INFO}
+    org.hibernate: ${LOGGING_LEVEL_ORG_HIBERNATE:INFO}
+    org.flywaydb: ${LOGGING_LEVEL_ORG_FLYWAYDB:INFO}
   pattern:
     level: "%5p"
     console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx"
@@ -58,8 +58,8 @@ logging:
 app:
   jwt:
     secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
-    expiration-ms: 86400000 # 24 hours
-    refresh-expiration-ms: 604800000 # 7 days
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000} # 24 hours
+    refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:604800000} # 7 days
   auth:
     activation-base-url: ${AUTH_ACTIVATION_BASE_URL:http://localhost:8080/api/v1/auth/activate}
     activation-token-ttl-hours: ${AUTH_ACTIVATION_TTL_HOURS:24}
@@ -108,6 +108,16 @@ app:
       auth: true
       starttls: true
   cors:
-    allowed-origins: "*"
-    allowed-methods: GET,POST,PUT,DELETE,OPTIONS,PATCH
-    allowed-headers: "*"
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:"*"}
+    allowed-methods: ${CORS_ALLOWED_METHODS:"GET,POST,PUT,DELETE,OPTIONS,PATCH"}
+    allowed-headers: ${CORS_ALLOWED_HEADERS:"*"}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
+
