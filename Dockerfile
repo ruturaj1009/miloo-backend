@@ -1,7 +1,7 @@
 # =========================================================================
-# Stage 1: Build the Spring Boot application using Maven & Java 17
+# Stage 1: Build the Spring Boot application using Maven & Java 21 LTS
 # =========================================================================
-FROM maven:3.9.9-eclipse-temurin-17-alpine AS builder
+FROM maven:3.9.9-eclipse-temurin-21-alpine AS builder
 
 WORKDIR /app
 
@@ -18,9 +18,9 @@ COPY src ./src
 RUN mvn clean package -DskipTests -B
 
 # =========================================================================
-# Stage 2: Lightweight Production Runtime Image (Eclipse Temurin JRE 17)
+# Stage 2: Lightweight Production Runtime Image (Eclipse Temurin JRE 21 LTS)
 # =========================================================================
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
@@ -37,9 +37,11 @@ USER spring:spring
 ENV PORT=8080
 EXPOSE 8080
 
-# JVM memory management tailored for cloud container environments (Render free/starter tiers ~512MB RAM)
-# 65% MaxRAM leaves ~180MB headroom for Metaspace, threads, JIT cache, and OS overhead to prevent OOM kills
-ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=65.0 -XX:InitialRAMPercentage=40.0 -XX:+ExitOnOutOfMemoryError"
+# JVM memory management tailored for cloud container environments (Render free/starter tiers ~512MB RAM):
+# -XX:+UseSerialGC: Minimizes GC metadata, card tables, and GC threads (saves ~30-40MB vs G1GC)
+# -XX:+UseStringDeduplication: Shares identical byte[] arrays across Strings (saves ~10-15% heap)
+# -XX:MaxRAMPercentage=65.0: Caps max heap at ~330MB, leaving ~180MB headroom for Metaspace and native memory
+ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:+UseSerialGC -XX:+UseStringDeduplication -XX:MaxRAMPercentage=65.0 -XX:InitialRAMPercentage=40.0 -XX:+ExitOnOutOfMemoryError"
 
 # Container healthcheck targeting Miloo Health endpoint
 HEALTHCHECK --interval=30s --timeout=5s --start-period=45s --retries=3 \
